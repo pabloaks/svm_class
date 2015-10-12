@@ -195,7 +195,7 @@ plot_test <- plot_test + theme(legend.position="none") + labs(list(title = "Perc
 
 #plotting the evolution of normal vector to the hyperplane
 #red point is start point, blue is answer
-test.df = data.frame(result_z$Z_history[,3]*result_z$Z_history[,1:2])
+test.df = data.frame(-result_z$Z_history[,3]*result_z$Z_history[,1:2])
 last_z = dim(result_z$Z_history)[1]
 plot_normv <- ggplot(test.df, aes(x = X1, y = X2)) + geom_point(alpha = 5/10)
 plot_normv <- plot_normv + geom_point(colour = "blue", aes(x = test.df[last_z,1], y= test.df[last_z,2],size = 1.0)) 
