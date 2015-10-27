@@ -3,6 +3,27 @@ if(! require(ggplot2))
 	{install.packages("ggplot2")}
 
 ########  FUNCTIONS  ########
+### AdaBoost(X, y, B)
+AdaBoost <- function(X, y, B)
+{
+	allPars = NULL; alphas = NULL
+	w = rep(1/dim(X)[1], dim(X)[1])
+	for( i in 1:B)
+	{
+		temp_par = train(X, w, y)
+		label = classify(X, temp_par)
+		temp_alpha = log((1-temp_par$error)/temp_par$error)
+		allPars = rbind(allPars, c(temp_par$j, temp_par$theta, temp_par$m))
+		alphas = c(alphas, temp_alpha) 
+		for(j in 1:length(w))
+		{
+			if (label[j] != y[j])	
+				w[j] = w[j]*exp(temp_alpha)
+		}
+	}
+	colnames(allPars) <- c("j", "theta", "m")
+	return(list(alphas = alphas, allPars = allPars))
+}
 ### train(X, w, y)
 train <- function(X, w, y)
 {
@@ -18,9 +39,7 @@ train <- function(X, w, y)
 	pars = list(j = j, theta = theta[j], m = m[j], error = errors[j])
 	return(pars)
 }
-
-### tree_stump(r, label, w)
-### finds optimal theta for given attribute
+### tree_stump(r, label, w) # finds optimal theta for given attribute
 tree_stump <- function(r, label, w)
 {
 	thetas = candidate_thetas(r)
@@ -37,8 +56,7 @@ tree_stump <- function(r, label, w)
 	}
 	return(list(thetas = thetas[pos], m = m, error = min_error))
 }
-### candidate_thetas(temp_col)
-## finds candidate thetas for given j
+### candidate_thetas(temp_col) # finds candidate thetas for given j
 candidate_thetas <- function(temp_col)
 {
 	temp_col = sort(temp_col)
@@ -89,29 +107,6 @@ classify <- function(X, pars)
 	}
 	return(as.vector(label))
 }
-
-### AdaBoost(X, y, B)
-AdaBoost <- function(X, y, B)
-{
-	allPars = NULL; alphas = NULL
-	w = rep(1/dim(X)[1], dim(X)[1])
-	for( i in 1:B)
-	{
-		temp_par = train(X, w, y)
-		label = classify(X, temp_par)
-		temp_alpha = log((1-temp_par$error)/temp_par$error)
-		allPars = rbind(allPars, c(temp_par$j, temp_par$theta, temp_par$m))
-		alphas = c(alphas, temp_alpha) 
-		for(j in 1:length(w))
-		{
-			if (label[j] != y[j])	
-				w[j] = w[j]*exp(temp_alpha)
-		}
-	}
-	colnames(allPars) <- c("j", "theta", "m")
-	return(list(alphas = alphas, allPars = allPars))
-}
-	
 ### agg_class(X, alpha, allPars)
 agg_class <- function(X, alpha, allPars)
 {
@@ -123,7 +118,6 @@ agg_class <- function(X, alpha, allPars)
 	}
 	return(sign(temp_sum))
 }
-
 ### accuarcy(y1, y2)
 accuarcy <- function(y1, y2)
 {
@@ -137,12 +131,10 @@ accuarcy <- function(y1, y2)
 	}
 	return( count/length(y1))
 }
-
 ###############################################
 ### load data, sample of 200, 256 factors (16x16)
 uspsdata.df <- read.table("C:/Users/Juan/Desktop/StatML/R/uspsdata.txt")
 uspscl.df <- read.table("C:/Users/Juan/Desktop/StatML/R/uspscl.txt")
-
 data_train = uspsdata.df
 class_train = uspscl.df$V1
 
@@ -171,7 +163,6 @@ for(j in 0:(num_k-1))
 	validate_error = rbind(validate_error, temp_validate_error)
 	print(j)
 }
-
 train_error = colSums(train_error) / num_k
 validate_error = colSums(validate_error) / num_k
 b_star = which.min(validate_error)
