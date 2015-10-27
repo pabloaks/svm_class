@@ -24,6 +24,7 @@ AdaBoost <- function(X, y, B)
 	colnames(allPars) <- c("j", "theta", "m")
 	return(list(alphas = alphas, allPars = allPars))
 }
+
 ### train(X, w, y)
 train <- function(X, w, y)
 {
@@ -39,7 +40,9 @@ train <- function(X, w, y)
 	pars = list(j = j, theta = theta[j], m = m[j], error = errors[j])
 	return(pars)
 }
-### tree_stump(r, label, w) # finds optimal theta for given attribute
+
+### tree_stump(r, label, w) 
+### finds optimal theta for given attribute
 tree_stump <- function(r, label, w)
 {
 	thetas = candidate_thetas(r)
@@ -56,7 +59,9 @@ tree_stump <- function(r, label, w)
 	}
 	return(list(thetas = thetas[pos], m = m, error = min_error))
 }
-### candidate_thetas(temp_col) # finds candidate thetas for given j
+
+### candidate_thetas(temp_col) 
+### finds candidate thetas for given j
 candidate_thetas <- function(temp_col)
 {
 	temp_col = sort(temp_col)
@@ -73,6 +78,7 @@ candidate_thetas <- function(temp_col)
 	}
 	return(thetas)
 }
+
 ### counterror(r, theta, y, w)
 counterror <- function(r, theta, y, w)
 {
@@ -93,6 +99,7 @@ counterror <- function(r, theta, y, w)
 	}
 	return(list(error = error, m = m))
 }
+
 ### classify(X, pars)
 classify <- function(X, pars)
 {
@@ -107,6 +114,7 @@ classify <- function(X, pars)
 	}
 	return(as.vector(label))
 }
+
 ### agg_class(X, alpha, allPars)
 agg_class <- function(X, alpha, allPars)
 {
