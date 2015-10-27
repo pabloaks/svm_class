@@ -99,7 +99,6 @@ counterror <- function(r, theta, y, w)
 	}
 	return(list(error = error, m = m))
 }
-
 ### classify(X, pars)
 classify <- function(X, pars)
 {
@@ -114,7 +113,6 @@ classify <- function(X, pars)
 	}
 	return(as.vector(label))
 }
-
 ### agg_class(X, alpha, allPars)
 agg_class <- function(X, alpha, allPars)
 {
@@ -126,6 +124,7 @@ agg_class <- function(X, alpha, allPars)
 	}
 	return(sign(temp_sum))
 }
+
 ### accuarcy(y1, y2)
 accuarcy <- function(y1, y2)
 {
