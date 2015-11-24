@@ -33,7 +33,7 @@ MultinomialEM <- function(H,K,tau)
 ############### driver of algo ###############
 H<-matrix(readBin("histograms.bin", "double", 640000), 40000, 16)
 H = H + 0.01
-for(j in 3:4)
+for(j in 3:5)
 {
 	dev.new()
 	tau = 0.01
